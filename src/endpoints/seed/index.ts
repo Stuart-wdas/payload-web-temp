@@ -1,4 +1,7 @@
 import type { CollectionSlug, GlobalSlug, Payload, PayloadRequest, File } from 'payload'
+import { readFile } from 'node:fs/promises'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 import { contactForm as contactFormData } from './contact-form'
 import { contact as contactPageData } from './contact-page'
@@ -6,6 +9,7 @@ import { home } from './home'
 import { image1 } from './image-1'
 import { image2 } from './image-2'
 import { imageHero1 } from './image-hero-1'
+import { motionLabPage, motionShowcasePage } from './motion-pages'
 import { post1 } from './post-1'
 import { post2 } from './post-2'
 import { post3 } from './post-3'
@@ -23,6 +27,8 @@ const collections: CollectionSlug[] = [
 const globals: GlobalSlug[] = ['header', 'footer']
 
 const categories = ['Technology', 'News', 'Finance', 'Design', 'Software', 'Engineering']
+const filename = fileURLToPath(import.meta.url)
+const dirname = path.dirname(filename)
 
 // Next.js revalidation errors are normal when seeding the database without a server running
 // i.e. running `yarn seed` locally instead of using the admin UI within an active app
@@ -84,18 +90,10 @@ export const seed = async ({
   payload.logger.info(`— Seeding media...`)
 
   const [image1Buffer, image2Buffer, image3Buffer, hero1Buffer] = await Promise.all([
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/3.x/templates/website/src/endpoints/seed/image-post1.webp',
-    ),
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/3.x/templates/website/src/endpoints/seed/image-post2.webp',
-    ),
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/3.x/templates/website/src/endpoints/seed/image-post3.webp',
-    ),
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/3.x/templates/website/src/endpoints/seed/image-hero1.webp',
-    ),
+    readSeedFile('image-post1.webp'),
+    readSeedFile('image-post2.webp'),
+    readSeedFile('image-post3.webp'),
+    readSeedFile('image-hero1.webp'),
   ])
 
   const [demoAuthor, image1Doc, image2Doc, image3Doc, imageHomeDoc] = await Promise.all([
@@ -202,7 +200,7 @@ export const seed = async ({
 
   payload.logger.info(`— Seeding pages...`)
 
-  const [_, contactPage] = await Promise.all([
+  const [_, contactPage, __, ___] = await Promise.all([
     payload.create({
       collection: 'pages',
       depth: 0,
@@ -212,6 +210,26 @@ export const seed = async ({
       collection: 'pages',
       depth: 0,
       data: contactPageData({ contactForm: contactForm }),
+    }),
+    payload.create({
+      collection: 'pages',
+      depth: 0,
+      data: motionLabPage({
+        heroImage: imageHomeDoc,
+        image1: image1Doc,
+        image2: image2Doc,
+        image3: image3Doc,
+      }),
+    }),
+    payload.create({
+      collection: 'pages',
+      depth: 0,
+      data: motionShowcasePage({
+        heroImage: imageHomeDoc,
+        image1: image1Doc,
+        image2: image2Doc,
+        image3: image3Doc,
+      }),
     }),
   ])
 
@@ -277,22 +295,14 @@ export const seed = async ({
   payload.logger.info('Seeded database successfully!')
 }
 
-async function fetchFileByURL(url: string): Promise<File> {
-  const res = await fetch(url, {
-    credentials: 'include',
-    method: 'GET',
-  })
-
-  if (!res.ok) {
-    throw new Error(`Failed to fetch file from ${url}, status: ${res.status}`)
-  }
-
-  const data = await res.arrayBuffer()
-
+async function readSeedFile(filename: string): Promise<File> {
+  const filePath = path.resolve(dirname, filename)
+  const data = await readFile(filePath)
+  const ext = path.extname(filename).replace('.', '')
   return {
-    name: url.split('/').pop() || `file-${Date.now()}`,
-    data: Buffer.from(data),
-    mimetype: `image/${url.split('.').pop()}`,
+    name: filename,
+    data,
+    mimetype: `image/${ext}`,
     size: data.byteLength,
   }
 }

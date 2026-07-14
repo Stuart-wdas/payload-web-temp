@@ -106,7 +106,7 @@ export interface Config {
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: string;
+    defaultIDType: number;
   };
   fallbackLocale: null;
   globals: {
@@ -156,7 +156,7 @@ export interface UserAuthOperations {
  * via the `definition` "pages".
  */
 export interface Page {
-  id: string;
+  id: number;
   title: string;
   hero: {
     type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
@@ -183,11 +183,11 @@ export interface Page {
             reference?:
               | ({
                   relationTo: 'pages';
-                  value: string | Page;
+                  value: number | Page;
                 } | null)
               | ({
                   relationTo: 'posts';
-                  value: string | Post;
+                  value: number | Post;
                 } | null);
             url?: string | null;
             label: string;
@@ -199,15 +199,40 @@ export interface Page {
           id?: string | null;
         }[]
       | null;
-    media?: (string | null) | Media;
+    media?: (number | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  layout: (
+    | CallToActionBlock
+    | ContentBlock
+    | MediaBlock
+    | ArchiveBlock
+    | FormBlock
+    | TimelineBlock
+    | FeatureShowcaseBlock
+    | AccordionBlock
+    | StatsBandBlock
+    | LogoRailBlock
+    | TestimonialStackBlock
+    | PricingGridBlock
+    | ProcessStepsBlock
+    | MetricsDashboardBlock
+    | ComparisonTableBlock
+    | StickyStoryBlock
+    | MediaMosaicBlock
+    | FeatureTabsBlock
+    | FaqGridBlock
+    | CtaBandBlock
+    | TeamGridBlock
+    | CaseStudyPreviewBlock
+    | EventScheduleBlock
+    | QuoteMarqueeBlock
+  )[];
   meta?: {
     title?: string | null;
     /**
      * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
-    image?: (string | null) | Media;
+    image?: (number | null) | Media;
     description?: string | null;
   };
   publishedAt?: string | null;
@@ -225,9 +250,9 @@ export interface Page {
  * via the `definition` "posts".
  */
 export interface Post {
-  id: string;
+  id: number;
   title: string;
-  heroImage?: (string | null) | Media;
+  heroImage?: (number | null) | Media;
   content: {
     root: {
       type: string;
@@ -243,18 +268,18 @@ export interface Post {
     };
     [k: string]: unknown;
   };
-  relatedPosts?: (string | Post)[] | null;
-  categories?: (string | Category)[] | null;
+  relatedPosts?: (number | Post)[] | null;
+  categories?: (number | Category)[] | null;
   meta?: {
     title?: string | null;
     /**
      * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
-    image?: (string | null) | Media;
+    image?: (number | null) | Media;
     description?: string | null;
   };
   publishedAt?: string | null;
-  authors?: (string | User)[] | null;
+  authors?: (number | User)[] | null;
   populatedAuthors?:
     | {
         id?: string | null;
@@ -275,7 +300,7 @@ export interface Post {
  * via the `definition` "media".
  */
 export interface Media {
-  id: string;
+  id: number;
   alt?: string | null;
   caption?: {
     root: {
@@ -292,7 +317,7 @@ export interface Media {
     };
     [k: string]: unknown;
   } | null;
-  folder?: (string | null) | FolderInterface;
+  folder?: (number | null) | FolderInterface;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -368,18 +393,18 @@ export interface Media {
  * via the `definition` "payload-folders".
  */
 export interface FolderInterface {
-  id: string;
+  id: number;
   name: string;
-  folder?: (string | null) | FolderInterface;
+  folder?: (number | null) | FolderInterface;
   documentsAndFolders?: {
     docs?: (
       | {
           relationTo?: 'payload-folders';
-          value: string | FolderInterface;
+          value: number | FolderInterface;
         }
       | {
           relationTo?: 'media';
-          value: string | Media;
+          value: number | Media;
         }
     )[];
     hasNextPage?: boolean;
@@ -394,17 +419,17 @@ export interface FolderInterface {
  * via the `definition` "categories".
  */
 export interface Category {
-  id: string;
+  id: number;
   title: string;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
   generateSlug?: boolean | null;
   slug: string;
-  parent?: (string | null) | Category;
+  parent?: (number | null) | Category;
   breadcrumbs?:
     | {
-        doc?: (string | null) | Category;
+        doc?: (number | null) | Category;
         url?: string | null;
         label?: string | null;
         id?: string | null;
@@ -418,7 +443,7 @@ export interface Category {
  * via the `definition` "users".
  */
 export interface User {
-  id: string;
+  id: number;
   name?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -467,11 +492,11 @@ export interface CallToActionBlock {
           reference?:
             | ({
                 relationTo: 'pages';
-                value: string | Page;
+                value: number | Page;
               } | null)
             | ({
                 relationTo: 'posts';
-                value: string | Post;
+                value: number | Post;
               } | null);
           url?: string | null;
           label: string;
@@ -517,11 +542,11 @@ export interface ContentBlock {
           reference?:
             | ({
                 relationTo: 'pages';
-                value: string | Page;
+                value: number | Page;
               } | null)
             | ({
                 relationTo: 'posts';
-                value: string | Post;
+                value: number | Post;
               } | null);
           url?: string | null;
           label: string;
@@ -542,7 +567,7 @@ export interface ContentBlock {
  * via the `definition` "MediaBlock".
  */
 export interface MediaBlock {
-  media: string | Media;
+  media: number | Media;
   id?: string | null;
   blockName?: string | null;
   blockType: 'mediaBlock';
@@ -569,12 +594,12 @@ export interface ArchiveBlock {
   } | null;
   populateBy?: ('collection' | 'selection') | null;
   relationTo?: 'posts' | null;
-  categories?: (string | Category)[] | null;
+  categories?: (number | Category)[] | null;
   limit?: number | null;
   selectedDocs?:
     | {
         relationTo: 'posts';
-        value: string | Post;
+        value: number | Post;
       }[]
     | null;
   id?: string | null;
@@ -586,7 +611,7 @@ export interface ArchiveBlock {
  * via the `definition` "FormBlock".
  */
 export interface FormBlock {
-  form: string | Form;
+  form: number | Form;
   enableIntro?: boolean | null;
   introContent?: {
     root: {
@@ -612,7 +637,7 @@ export interface FormBlock {
  * via the `definition` "forms".
  */
 export interface Form {
-  id: string;
+  id: number;
   title: string;
   fields?:
     | (
@@ -783,10 +808,1345 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TimelineBlock".
+ */
+export interface TimelineBlock {
+  eyebrow?: string | null;
+  title: string;
+  intro?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Use these controls to tune how the block enters the viewport. Start with medium values, then increase stagger or side-based motion when you want a more dramatic reveal.
+   */
+  motion?: {
+    /**
+     * Recommended presets: subtle = None, medium = Soft Scale, dramatic = Soft Scale with a higher stagger on child items.
+     */
+    sectionAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = None or Fly Up, medium = Fly Up, dramatic = Fly Left or Fly Right.
+     */
+    introAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = Fly Up, medium = Alternate Sides, dramatic = Fly Left / Fly Right with higher stagger.
+     */
+    itemAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Delay between repeated item animations in milliseconds. Recommended presets: subtle = 40-80ms, medium = 100-160ms, dramatic = 220-380ms.
+     */
+    stagger?: number | null;
+  };
+  items?:
+    | {
+        period: string;
+        title: string;
+        description: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        links?:
+          | {
+              link: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: number | Post;
+                    } | null);
+                url?: string | null;
+                label: string;
+                /**
+                 * Choose how the link should be rendered.
+                 */
+                appearance?: ('default' | 'outline') | null;
+              };
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'timeline';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeatureShowcaseBlock".
+ */
+export interface FeatureShowcaseBlock {
+  eyebrow?: string | null;
+  title: string;
+  intro?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Use these controls to tune how the block enters the viewport. Start with medium values, then increase stagger or side-based motion when you want a more dramatic reveal.
+   */
+  motion?: {
+    /**
+     * Recommended presets: subtle = None, medium = Soft Scale, dramatic = Soft Scale with a higher stagger on child items.
+     */
+    sectionAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = None or Fly Up, medium = Fly Up, dramatic = Fly Left or Fly Right.
+     */
+    introAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = Fly Up, medium = Alternate Sides, dramatic = Fly Left / Fly Right with higher stagger.
+     */
+    itemAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Delay between repeated item animations in milliseconds. Recommended presets: subtle = 40-80ms, medium = 100-160ms, dramatic = 220-380ms.
+     */
+    stagger?: number | null;
+    /**
+     * Higher values create a stronger vertical parallax drift on media. Recommended presets: subtle = 8-16, medium = 18-28, dramatic = 32-48. Visible only when the block item has media.
+     */
+    parallaxStrength?: number | null;
+  };
+  items?:
+    | {
+        kicker?: string | null;
+        title: string;
+        description: string;
+        media?: (number | null) | Media;
+        links?:
+          | {
+              link: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: number | Post;
+                    } | null);
+                url?: string | null;
+                label: string;
+                /**
+                 * Choose how the link should be rendered.
+                 */
+                appearance?: ('default' | 'outline') | null;
+              };
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'featureShowcase';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AccordionBlock".
+ */
+export interface AccordionBlock {
+  eyebrow?: string | null;
+  title: string;
+  intro?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Use these controls to tune how the block enters the viewport. Start with medium values, then increase stagger or side-based motion when you want a more dramatic reveal.
+   */
+  motion?: {
+    /**
+     * Recommended presets: subtle = None, medium = Soft Scale, dramatic = Soft Scale with a higher stagger on child items.
+     */
+    sectionAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = None or Fly Up, medium = Fly Up, dramatic = Fly Left or Fly Right.
+     */
+    introAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = Fly Up, medium = Alternate Sides, dramatic = Fly Left / Fly Right with higher stagger.
+     */
+    itemAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Delay between repeated item animations in milliseconds. Recommended presets: subtle = 40-80ms, medium = 100-160ms, dramatic = 220-380ms.
+     */
+    stagger?: number | null;
+  };
+  items?:
+    | {
+        title: string;
+        content: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        defaultOpen?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'accordion';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StatsBandBlock".
+ */
+export interface StatsBandBlock {
+  eyebrow?: string | null;
+  title: string;
+  intro?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Use these controls to tune how the block enters the viewport. Start with medium values, then increase stagger or side-based motion when you want a more dramatic reveal.
+   */
+  motion?: {
+    /**
+     * Recommended presets: subtle = None, medium = Soft Scale, dramatic = Soft Scale with a higher stagger on child items.
+     */
+    sectionAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = None or Fly Up, medium = Fly Up, dramatic = Fly Left or Fly Right.
+     */
+    introAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = Fly Up, medium = Alternate Sides, dramatic = Fly Left / Fly Right with higher stagger.
+     */
+    itemAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Delay between repeated item animations in milliseconds. Recommended presets: subtle = 40-80ms, medium = 100-160ms, dramatic = 220-380ms.
+     */
+    stagger?: number | null;
+  };
+  items?:
+    | {
+        value: string;
+        label: string;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'statsBand';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LogoRailBlock".
+ */
+export interface LogoRailBlock {
+  eyebrow?: string | null;
+  title: string;
+  intro?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Use these controls to tune how the block enters the viewport. Start with medium values, then increase stagger or side-based motion when you want a more dramatic reveal.
+   */
+  motion?: {
+    /**
+     * Recommended presets: subtle = None, medium = Soft Scale, dramatic = Soft Scale with a higher stagger on child items.
+     */
+    sectionAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = None or Fly Up, medium = Fly Up, dramatic = Fly Left or Fly Right.
+     */
+    introAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = Fly Up, medium = Alternate Sides, dramatic = Fly Left / Fly Right with higher stagger.
+     */
+    itemAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Delay between repeated item animations in milliseconds. Recommended presets: subtle = 40-80ms, medium = 100-160ms, dramatic = 220-380ms.
+     */
+    stagger?: number | null;
+  };
+  logos?:
+    | {
+        name: string;
+        media?: (number | null) | Media;
+        url?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'logoRail';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TestimonialStackBlock".
+ */
+export interface TestimonialStackBlock {
+  eyebrow?: string | null;
+  title: string;
+  intro?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Use these controls to tune how the block enters the viewport. Start with medium values, then increase stagger or side-based motion when you want a more dramatic reveal.
+   */
+  motion?: {
+    /**
+     * Recommended presets: subtle = None, medium = Soft Scale, dramatic = Soft Scale with a higher stagger on child items.
+     */
+    sectionAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = None or Fly Up, medium = Fly Up, dramatic = Fly Left or Fly Right.
+     */
+    introAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = Fly Up, medium = Alternate Sides, dramatic = Fly Left / Fly Right with higher stagger.
+     */
+    itemAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Delay between repeated item animations in milliseconds. Recommended presets: subtle = 40-80ms, medium = 100-160ms, dramatic = 220-380ms.
+     */
+    stagger?: number | null;
+  };
+  testimonials?:
+    | {
+        quote: string;
+        author: string;
+        role?: string | null;
+        company?: string | null;
+        avatar?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'testimonialStack';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PricingGridBlock".
+ */
+export interface PricingGridBlock {
+  eyebrow?: string | null;
+  title: string;
+  intro?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Use these controls to tune how the block enters the viewport. Start with medium values, then increase stagger or side-based motion when you want a more dramatic reveal.
+   */
+  motion?: {
+    /**
+     * Recommended presets: subtle = None, medium = Soft Scale, dramatic = Soft Scale with a higher stagger on child items.
+     */
+    sectionAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = None or Fly Up, medium = Fly Up, dramatic = Fly Left or Fly Right.
+     */
+    introAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = Fly Up, medium = Alternate Sides, dramatic = Fly Left / Fly Right with higher stagger.
+     */
+    itemAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Delay between repeated item animations in milliseconds. Recommended presets: subtle = 40-80ms, medium = 100-160ms, dramatic = 220-380ms.
+     */
+    stagger?: number | null;
+  };
+  plans?:
+    | {
+        name: string;
+        price: string;
+        billingNote?: string | null;
+        summary?: string | null;
+        featured?: boolean | null;
+        features?:
+          | {
+              label: string;
+              id?: string | null;
+            }[]
+          | null;
+        links?:
+          | {
+              link: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: number | Post;
+                    } | null);
+                url?: string | null;
+                label: string;
+                /**
+                 * Choose how the link should be rendered.
+                 */
+                appearance?: ('default' | 'outline') | null;
+              };
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'pricingGrid';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProcessStepsBlock".
+ */
+export interface ProcessStepsBlock {
+  eyebrow?: string | null;
+  title: string;
+  intro?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Use these controls to tune how the block enters the viewport. Start with medium values, then increase stagger or side-based motion when you want a more dramatic reveal.
+   */
+  motion?: {
+    /**
+     * Recommended presets: subtle = None, medium = Soft Scale, dramatic = Soft Scale with a higher stagger on child items.
+     */
+    sectionAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = None or Fly Up, medium = Fly Up, dramatic = Fly Left or Fly Right.
+     */
+    introAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = Fly Up, medium = Alternate Sides, dramatic = Fly Left / Fly Right with higher stagger.
+     */
+    itemAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Delay between repeated item animations in milliseconds. Recommended presets: subtle = 40-80ms, medium = 100-160ms, dramatic = 220-380ms.
+     */
+    stagger?: number | null;
+  };
+  steps?:
+    | {
+        stepLabel?: string | null;
+        title: string;
+        description: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        media?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'processSteps';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MetricsDashboardBlock".
+ */
+export interface MetricsDashboardBlock {
+  eyebrow?: string | null;
+  title: string;
+  intro?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Use these controls to tune how the block enters the viewport. Start with medium values, then increase stagger or side-based motion when you want a more dramatic reveal.
+   */
+  motion?: {
+    /**
+     * Recommended presets: subtle = None, medium = Soft Scale, dramatic = Soft Scale with a higher stagger on child items.
+     */
+    sectionAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = None or Fly Up, medium = Fly Up, dramatic = Fly Left or Fly Right.
+     */
+    introAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = Fly Up, medium = Alternate Sides, dramatic = Fly Left / Fly Right with higher stagger.
+     */
+    itemAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Delay between repeated item animations in milliseconds. Recommended presets: subtle = 40-80ms, medium = 100-160ms, dramatic = 220-380ms.
+     */
+    stagger?: number | null;
+  };
+  metrics?:
+    | {
+        label: string;
+        value: string;
+        trend?: string | null;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'metricsDashboard';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ComparisonTableBlock".
+ */
+export interface ComparisonTableBlock {
+  eyebrow?: string | null;
+  title: string;
+  intro?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Use these controls to tune how the block enters the viewport. Start with medium values, then increase stagger or side-based motion when you want a more dramatic reveal.
+   */
+  motion?: {
+    /**
+     * Recommended presets: subtle = None, medium = Soft Scale, dramatic = Soft Scale with a higher stagger on child items.
+     */
+    sectionAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = None or Fly Up, medium = Fly Up, dramatic = Fly Left or Fly Right.
+     */
+    introAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = Fly Up, medium = Alternate Sides, dramatic = Fly Left / Fly Right with higher stagger.
+     */
+    itemAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Delay between repeated item animations in milliseconds. Recommended presets: subtle = 40-80ms, medium = 100-160ms, dramatic = 220-380ms.
+     */
+    stagger?: number | null;
+  };
+  columns?:
+    | {
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  rows?:
+    | {
+        label: string;
+        cells?:
+          | {
+              value: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'comparisonTable';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StickyStoryBlock".
+ */
+export interface StickyStoryBlock {
+  eyebrow?: string | null;
+  title: string;
+  intro?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Use these controls to tune how the block enters the viewport. Start with medium values, then increase stagger or side-based motion when you want a more dramatic reveal.
+   */
+  motion?: {
+    /**
+     * Recommended presets: subtle = None, medium = Soft Scale, dramatic = Soft Scale with a higher stagger on child items.
+     */
+    sectionAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = None or Fly Up, medium = Fly Up, dramatic = Fly Left or Fly Right.
+     */
+    introAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = Fly Up, medium = Alternate Sides, dramatic = Fly Left / Fly Right with higher stagger.
+     */
+    itemAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Delay between repeated item animations in milliseconds. Recommended presets: subtle = 40-80ms, medium = 100-160ms, dramatic = 220-380ms.
+     */
+    stagger?: number | null;
+  };
+  panels?:
+    | {
+        eyebrow?: string | null;
+        title: string;
+        content: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        media?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'stickyStory';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MediaMosaicBlock".
+ */
+export interface MediaMosaicBlock {
+  eyebrow?: string | null;
+  title: string;
+  intro?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Use these controls to tune how the block enters the viewport. Start with medium values, then increase stagger or side-based motion when you want a more dramatic reveal.
+   */
+  motion?: {
+    /**
+     * Recommended presets: subtle = None, medium = Soft Scale, dramatic = Soft Scale with a higher stagger on child items.
+     */
+    sectionAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = None or Fly Up, medium = Fly Up, dramatic = Fly Left or Fly Right.
+     */
+    introAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = Fly Up, medium = Alternate Sides, dramatic = Fly Left / Fly Right with higher stagger.
+     */
+    itemAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Delay between repeated item animations in milliseconds. Recommended presets: subtle = 40-80ms, medium = 100-160ms, dramatic = 220-380ms.
+     */
+    stagger?: number | null;
+  };
+  items?:
+    | {
+        title?: string | null;
+        media: number | Media;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'mediaMosaic';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeatureTabsBlock".
+ */
+export interface FeatureTabsBlock {
+  eyebrow?: string | null;
+  title: string;
+  intro?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Use these controls to tune how the block enters the viewport. Start with medium values, then increase stagger or side-based motion when you want a more dramatic reveal.
+   */
+  motion?: {
+    /**
+     * Recommended presets: subtle = None, medium = Soft Scale, dramatic = Soft Scale with a higher stagger on child items.
+     */
+    sectionAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = None or Fly Up, medium = Fly Up, dramatic = Fly Left or Fly Right.
+     */
+    introAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = Fly Up, medium = Alternate Sides, dramatic = Fly Left / Fly Right with higher stagger.
+     */
+    itemAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Delay between repeated item animations in milliseconds. Recommended presets: subtle = 40-80ms, medium = 100-160ms, dramatic = 220-380ms.
+     */
+    stagger?: number | null;
+  };
+  tabs?:
+    | {
+        label: string;
+        title: string;
+        content: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        media?: (number | null) | Media;
+        links?:
+          | {
+              link: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: number | Post;
+                    } | null);
+                url?: string | null;
+                label: string;
+                /**
+                 * Choose how the link should be rendered.
+                 */
+                appearance?: ('default' | 'outline') | null;
+              };
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'featureTabs';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FaqGridBlock".
+ */
+export interface FaqGridBlock {
+  eyebrow?: string | null;
+  title: string;
+  intro?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Use these controls to tune how the block enters the viewport. Start with medium values, then increase stagger or side-based motion when you want a more dramatic reveal.
+   */
+  motion?: {
+    /**
+     * Recommended presets: subtle = None, medium = Soft Scale, dramatic = Soft Scale with a higher stagger on child items.
+     */
+    sectionAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = None or Fly Up, medium = Fly Up, dramatic = Fly Left or Fly Right.
+     */
+    introAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = Fly Up, medium = Alternate Sides, dramatic = Fly Left / Fly Right with higher stagger.
+     */
+    itemAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Delay between repeated item animations in milliseconds. Recommended presets: subtle = 40-80ms, medium = 100-160ms, dramatic = 220-380ms.
+     */
+    stagger?: number | null;
+  };
+  categories?:
+    | {
+        title: string;
+        items?:
+          | {
+              question: string;
+              answer: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              };
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'faqGrid';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CtaBandBlock".
+ */
+export interface CtaBandBlock {
+  eyebrow?: string | null;
+  title: string;
+  intro?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Use these controls to tune how the block enters the viewport. Start with medium values, then increase stagger or side-based motion when you want a more dramatic reveal.
+   */
+  motion?: {
+    /**
+     * Recommended presets: subtle = None, medium = Soft Scale, dramatic = Soft Scale with a higher stagger on child items.
+     */
+    sectionAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = None or Fly Up, medium = Fly Up, dramatic = Fly Left or Fly Right.
+     */
+    introAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = Fly Up, medium = Alternate Sides, dramatic = Fly Left / Fly Right with higher stagger.
+     */
+    itemAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Delay between repeated item animations in milliseconds. Recommended presets: subtle = 40-80ms, medium = 100-160ms, dramatic = 220-380ms.
+     */
+    stagger?: number | null;
+  };
+  links?:
+    | {
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: number | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: number | Post;
+              } | null);
+          url?: string | null;
+          label: string;
+          /**
+           * Choose how the link should be rendered.
+           */
+          appearance?: ('default' | 'outline') | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  media?: (number | null) | Media;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'ctaBand';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TeamGridBlock".
+ */
+export interface TeamGridBlock {
+  eyebrow?: string | null;
+  title: string;
+  intro?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Use these controls to tune how the block enters the viewport. Start with medium values, then increase stagger or side-based motion when you want a more dramatic reveal.
+   */
+  motion?: {
+    /**
+     * Recommended presets: subtle = None, medium = Soft Scale, dramatic = Soft Scale with a higher stagger on child items.
+     */
+    sectionAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = None or Fly Up, medium = Fly Up, dramatic = Fly Left or Fly Right.
+     */
+    introAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = Fly Up, medium = Alternate Sides, dramatic = Fly Left / Fly Right with higher stagger.
+     */
+    itemAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Delay between repeated item animations in milliseconds. Recommended presets: subtle = 40-80ms, medium = 100-160ms, dramatic = 220-380ms.
+     */
+    stagger?: number | null;
+  };
+  members?:
+    | {
+        name: string;
+        role: string;
+        bio?: string | null;
+        photo?: (number | null) | Media;
+        links?:
+          | {
+              link: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: number | Post;
+                    } | null);
+                url?: string | null;
+                label: string;
+              };
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'teamGrid';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CaseStudyPreviewBlock".
+ */
+export interface CaseStudyPreviewBlock {
+  eyebrow?: string | null;
+  title: string;
+  intro?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Use these controls to tune how the block enters the viewport. Start with medium values, then increase stagger or side-based motion when you want a more dramatic reveal.
+   */
+  motion?: {
+    /**
+     * Recommended presets: subtle = None, medium = Soft Scale, dramatic = Soft Scale with a higher stagger on child items.
+     */
+    sectionAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = None or Fly Up, medium = Fly Up, dramatic = Fly Left or Fly Right.
+     */
+    introAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = Fly Up, medium = Alternate Sides, dramatic = Fly Left / Fly Right with higher stagger.
+     */
+    itemAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Delay between repeated item animations in milliseconds. Recommended presets: subtle = 40-80ms, medium = 100-160ms, dramatic = 220-380ms.
+     */
+    stagger?: number | null;
+  };
+  studies?:
+    | {
+        client: string;
+        title: string;
+        summary: string;
+        media?: (number | null) | Media;
+        results?:
+          | {
+              label: string;
+              id?: string | null;
+            }[]
+          | null;
+        links?:
+          | {
+              link: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: number | Post;
+                    } | null);
+                url?: string | null;
+                label: string;
+                /**
+                 * Choose how the link should be rendered.
+                 */
+                appearance?: ('default' | 'outline') | null;
+              };
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'caseStudyPreview';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "EventScheduleBlock".
+ */
+export interface EventScheduleBlock {
+  eyebrow?: string | null;
+  title: string;
+  intro?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Use these controls to tune how the block enters the viewport. Start with medium values, then increase stagger or side-based motion when you want a more dramatic reveal.
+   */
+  motion?: {
+    /**
+     * Recommended presets: subtle = None, medium = Soft Scale, dramatic = Soft Scale with a higher stagger on child items.
+     */
+    sectionAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = None or Fly Up, medium = Fly Up, dramatic = Fly Left or Fly Right.
+     */
+    introAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = Fly Up, medium = Alternate Sides, dramatic = Fly Left / Fly Right with higher stagger.
+     */
+    itemAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Delay between repeated item animations in milliseconds. Recommended presets: subtle = 40-80ms, medium = 100-160ms, dramatic = 220-380ms.
+     */
+    stagger?: number | null;
+  };
+  days?:
+    | {
+        label: string;
+        sessions?:
+          | {
+              time: string;
+              title: string;
+              speaker?: string | null;
+              location?: string | null;
+              description?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'eventSchedule';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "QuoteMarqueeBlock".
+ */
+export interface QuoteMarqueeBlock {
+  eyebrow?: string | null;
+  title: string;
+  intro?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Use these controls to tune how the block enters the viewport. Start with medium values, then increase stagger or side-based motion when you want a more dramatic reveal.
+   */
+  motion?: {
+    /**
+     * Recommended presets: subtle = None, medium = Soft Scale, dramatic = Soft Scale with a higher stagger on child items.
+     */
+    sectionAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = None or Fly Up, medium = Fly Up, dramatic = Fly Left or Fly Right.
+     */
+    introAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Recommended presets: subtle = Fly Up, medium = Alternate Sides, dramatic = Fly Left / Fly Right with higher stagger.
+     */
+    itemAnimation?: ('none' | 'fly-up' | 'fly-left' | 'fly-right' | 'soft-scale' | 'alternate-sides') | null;
+    /**
+     * Delay between repeated item animations in milliseconds. Recommended presets: subtle = 40-80ms, medium = 100-160ms, dramatic = 220-380ms.
+     */
+    stagger?: number | null;
+  };
+  quotes?:
+    | {
+        quote: string;
+        author: string;
+        company?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'quoteMarquee';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
-  id: string;
+  id: number;
   /**
    * You will need to rebuild the website when changing this field.
    */
@@ -796,11 +2156,11 @@ export interface Redirect {
     reference?:
       | ({
           relationTo: 'pages';
-          value: string | Page;
+          value: number | Page;
         } | null)
       | ({
           relationTo: 'posts';
-          value: string | Post;
+          value: number | Post;
         } | null);
     url?: string | null;
   };
@@ -812,8 +2172,8 @@ export interface Redirect {
  * via the `definition` "form-submissions".
  */
 export interface FormSubmission {
-  id: string;
-  form: string | Form;
+  id: number;
+  form: number | Form;
   submissionData?:
     | {
         field: string;
@@ -831,18 +2191,18 @@ export interface FormSubmission {
  * via the `definition` "search".
  */
 export interface Search {
-  id: string;
+  id: number;
   title?: string | null;
   priority?: number | null;
   doc: {
     relationTo: 'posts';
-    value: string | Post;
+    value: number | Post;
   };
   slug?: string | null;
   meta?: {
     title?: string | null;
     description?: string | null;
-    image?: (string | null) | Media;
+    image?: (number | null) | Media;
   };
   categories?:
     | {
@@ -860,7 +2220,7 @@ export interface Search {
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: string;
+  id: number;
   key: string;
   data:
     | {
@@ -877,7 +2237,7 @@ export interface PayloadKv {
  * via the `definition` "payload-jobs".
  */
 export interface PayloadJob {
-  id: string;
+  id: number;
   /**
    * Input data provided to the job
    */
@@ -969,52 +2329,52 @@ export interface PayloadJob {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: string;
+  id: number;
   document?:
     | ({
         relationTo: 'pages';
-        value: string | Page;
+        value: number | Page;
       } | null)
     | ({
         relationTo: 'posts';
-        value: string | Post;
+        value: number | Post;
       } | null)
     | ({
         relationTo: 'media';
-        value: string | Media;
+        value: number | Media;
       } | null)
     | ({
         relationTo: 'categories';
-        value: string | Category;
+        value: number | Category;
       } | null)
     | ({
         relationTo: 'users';
-        value: string | User;
+        value: number | User;
       } | null)
     | ({
         relationTo: 'redirects';
-        value: string | Redirect;
+        value: number | Redirect;
       } | null)
     | ({
         relationTo: 'forms';
-        value: string | Form;
+        value: number | Form;
       } | null)
     | ({
         relationTo: 'form-submissions';
-        value: string | FormSubmission;
+        value: number | FormSubmission;
       } | null)
     | ({
         relationTo: 'search';
-        value: string | Search;
+        value: number | Search;
       } | null)
     | ({
         relationTo: 'payload-folders';
-        value: string | FolderInterface;
+        value: number | FolderInterface;
       } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -1024,10 +2384,10 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: string;
+  id: number;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   key?: string | null;
   value?:
@@ -1047,7 +2407,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: string;
+  id: number;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -1089,6 +2449,25 @@ export interface PagesSelect<T extends boolean = true> {
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
+        timeline?: T | TimelineBlockSelect<T>;
+        featureShowcase?: T | FeatureShowcaseBlockSelect<T>;
+        accordion?: T | AccordionBlockSelect<T>;
+        statsBand?: T | StatsBandBlockSelect<T>;
+        logoRail?: T | LogoRailBlockSelect<T>;
+        testimonialStack?: T | TestimonialStackBlockSelect<T>;
+        pricingGrid?: T | PricingGridBlockSelect<T>;
+        processSteps?: T | ProcessStepsBlockSelect<T>;
+        metricsDashboard?: T | MetricsDashboardBlockSelect<T>;
+        comparisonTable?: T | ComparisonTableBlockSelect<T>;
+        stickyStory?: T | StickyStoryBlockSelect<T>;
+        mediaMosaic?: T | MediaMosaicBlockSelect<T>;
+        featureTabs?: T | FeatureTabsBlockSelect<T>;
+        faqGrid?: T | FaqGridBlockSelect<T>;
+        ctaBand?: T | CtaBandBlockSelect<T>;
+        teamGrid?: T | TeamGridBlockSelect<T>;
+        caseStudyPreview?: T | CaseStudyPreviewBlockSelect<T>;
+        eventSchedule?: T | EventScheduleBlockSelect<T>;
+        quoteMarquee?: T | QuoteMarqueeBlockSelect<T>;
       };
   meta?:
     | T
@@ -1185,6 +2564,662 @@ export interface FormBlockSelect<T extends boolean = true> {
   form?: T;
   enableIntro?: T;
   introContent?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TimelineBlock_select".
+ */
+export interface TimelineBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  intro?: T;
+  motion?:
+    | T
+    | {
+        sectionAnimation?: T;
+        introAnimation?: T;
+        itemAnimation?: T;
+        stagger?: T;
+      };
+  items?:
+    | T
+    | {
+        period?: T;
+        title?: T;
+        description?: T;
+        links?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                    appearance?: T;
+                  };
+              id?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeatureShowcaseBlock_select".
+ */
+export interface FeatureShowcaseBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  intro?: T;
+  motion?:
+    | T
+    | {
+        sectionAnimation?: T;
+        introAnimation?: T;
+        itemAnimation?: T;
+        stagger?: T;
+        parallaxStrength?: T;
+      };
+  items?:
+    | T
+    | {
+        kicker?: T;
+        title?: T;
+        description?: T;
+        media?: T;
+        links?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                    appearance?: T;
+                  };
+              id?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AccordionBlock_select".
+ */
+export interface AccordionBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  intro?: T;
+  motion?:
+    | T
+    | {
+        sectionAnimation?: T;
+        introAnimation?: T;
+        itemAnimation?: T;
+        stagger?: T;
+      };
+  items?:
+    | T
+    | {
+        title?: T;
+        content?: T;
+        defaultOpen?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StatsBandBlock_select".
+ */
+export interface StatsBandBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  intro?: T;
+  motion?:
+    | T
+    | {
+        sectionAnimation?: T;
+        introAnimation?: T;
+        itemAnimation?: T;
+        stagger?: T;
+      };
+  items?:
+    | T
+    | {
+        value?: T;
+        label?: T;
+        description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LogoRailBlock_select".
+ */
+export interface LogoRailBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  intro?: T;
+  motion?:
+    | T
+    | {
+        sectionAnimation?: T;
+        introAnimation?: T;
+        itemAnimation?: T;
+        stagger?: T;
+      };
+  logos?:
+    | T
+    | {
+        name?: T;
+        media?: T;
+        url?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TestimonialStackBlock_select".
+ */
+export interface TestimonialStackBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  intro?: T;
+  motion?:
+    | T
+    | {
+        sectionAnimation?: T;
+        introAnimation?: T;
+        itemAnimation?: T;
+        stagger?: T;
+      };
+  testimonials?:
+    | T
+    | {
+        quote?: T;
+        author?: T;
+        role?: T;
+        company?: T;
+        avatar?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PricingGridBlock_select".
+ */
+export interface PricingGridBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  intro?: T;
+  motion?:
+    | T
+    | {
+        sectionAnimation?: T;
+        introAnimation?: T;
+        itemAnimation?: T;
+        stagger?: T;
+      };
+  plans?:
+    | T
+    | {
+        name?: T;
+        price?: T;
+        billingNote?: T;
+        summary?: T;
+        featured?: T;
+        features?:
+          | T
+          | {
+              label?: T;
+              id?: T;
+            };
+        links?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                    appearance?: T;
+                  };
+              id?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProcessStepsBlock_select".
+ */
+export interface ProcessStepsBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  intro?: T;
+  motion?:
+    | T
+    | {
+        sectionAnimation?: T;
+        introAnimation?: T;
+        itemAnimation?: T;
+        stagger?: T;
+      };
+  steps?:
+    | T
+    | {
+        stepLabel?: T;
+        title?: T;
+        description?: T;
+        media?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MetricsDashboardBlock_select".
+ */
+export interface MetricsDashboardBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  intro?: T;
+  motion?:
+    | T
+    | {
+        sectionAnimation?: T;
+        introAnimation?: T;
+        itemAnimation?: T;
+        stagger?: T;
+      };
+  metrics?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        trend?: T;
+        description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ComparisonTableBlock_select".
+ */
+export interface ComparisonTableBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  intro?: T;
+  motion?:
+    | T
+    | {
+        sectionAnimation?: T;
+        introAnimation?: T;
+        itemAnimation?: T;
+        stagger?: T;
+      };
+  columns?:
+    | T
+    | {
+        label?: T;
+        id?: T;
+      };
+  rows?:
+    | T
+    | {
+        label?: T;
+        cells?:
+          | T
+          | {
+              value?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StickyStoryBlock_select".
+ */
+export interface StickyStoryBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  intro?: T;
+  motion?:
+    | T
+    | {
+        sectionAnimation?: T;
+        introAnimation?: T;
+        itemAnimation?: T;
+        stagger?: T;
+      };
+  panels?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        content?: T;
+        media?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MediaMosaicBlock_select".
+ */
+export interface MediaMosaicBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  intro?: T;
+  motion?:
+    | T
+    | {
+        sectionAnimation?: T;
+        introAnimation?: T;
+        itemAnimation?: T;
+        stagger?: T;
+      };
+  items?:
+    | T
+    | {
+        title?: T;
+        media?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeatureTabsBlock_select".
+ */
+export interface FeatureTabsBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  intro?: T;
+  motion?:
+    | T
+    | {
+        sectionAnimation?: T;
+        introAnimation?: T;
+        itemAnimation?: T;
+        stagger?: T;
+      };
+  tabs?:
+    | T
+    | {
+        label?: T;
+        title?: T;
+        content?: T;
+        media?: T;
+        links?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                    appearance?: T;
+                  };
+              id?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FaqGridBlock_select".
+ */
+export interface FaqGridBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  intro?: T;
+  motion?:
+    | T
+    | {
+        sectionAnimation?: T;
+        introAnimation?: T;
+        itemAnimation?: T;
+        stagger?: T;
+      };
+  categories?:
+    | T
+    | {
+        title?: T;
+        items?:
+          | T
+          | {
+              question?: T;
+              answer?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CtaBandBlock_select".
+ */
+export interface CtaBandBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  intro?: T;
+  motion?:
+    | T
+    | {
+        sectionAnimation?: T;
+        introAnimation?: T;
+        itemAnimation?: T;
+        stagger?: T;
+      };
+  links?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
+        id?: T;
+      };
+  media?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TeamGridBlock_select".
+ */
+export interface TeamGridBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  intro?: T;
+  motion?:
+    | T
+    | {
+        sectionAnimation?: T;
+        introAnimation?: T;
+        itemAnimation?: T;
+        stagger?: T;
+      };
+  members?:
+    | T
+    | {
+        name?: T;
+        role?: T;
+        bio?: T;
+        photo?: T;
+        links?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                  };
+              id?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CaseStudyPreviewBlock_select".
+ */
+export interface CaseStudyPreviewBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  intro?: T;
+  motion?:
+    | T
+    | {
+        sectionAnimation?: T;
+        introAnimation?: T;
+        itemAnimation?: T;
+        stagger?: T;
+      };
+  studies?:
+    | T
+    | {
+        client?: T;
+        title?: T;
+        summary?: T;
+        media?: T;
+        results?:
+          | T
+          | {
+              label?: T;
+              id?: T;
+            };
+        links?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                    appearance?: T;
+                  };
+              id?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "EventScheduleBlock_select".
+ */
+export interface EventScheduleBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  intro?: T;
+  motion?:
+    | T
+    | {
+        sectionAnimation?: T;
+        introAnimation?: T;
+        itemAnimation?: T;
+        stagger?: T;
+      };
+  days?:
+    | T
+    | {
+        label?: T;
+        sessions?:
+          | T
+          | {
+              time?: T;
+              title?: T;
+              speaker?: T;
+              location?: T;
+              description?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "QuoteMarqueeBlock_select".
+ */
+export interface QuoteMarqueeBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  intro?: T;
+  motion?:
+    | T
+    | {
+        sectionAnimation?: T;
+        introAnimation?: T;
+        itemAnimation?: T;
+        stagger?: T;
+      };
+  quotes?:
+    | T
+    | {
+        quote?: T;
+        author?: T;
+        company?: T;
+        id?: T;
+      };
   id?: T;
   blockName?: T;
 }
@@ -1636,7 +3671,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  * via the `definition` "header".
  */
 export interface Header {
-  id: string;
+  id: number;
   navItems?:
     | {
         link: {
@@ -1645,11 +3680,11 @@ export interface Header {
           reference?:
             | ({
                 relationTo: 'pages';
-                value: string | Page;
+                value: number | Page;
               } | null)
             | ({
                 relationTo: 'posts';
-                value: string | Post;
+                value: number | Post;
               } | null);
           url?: string | null;
           label: string;
@@ -1665,7 +3700,7 @@ export interface Header {
  * via the `definition` "footer".
  */
 export interface Footer {
-  id: string;
+  id: number;
   navItems?:
     | {
         link: {
@@ -1674,11 +3709,11 @@ export interface Footer {
           reference?:
             | ({
                 relationTo: 'pages';
-                value: string | Page;
+                value: number | Page;
               } | null)
             | ({
                 relationTo: 'posts';
-                value: string | Post;
+                value: number | Post;
               } | null);
           url?: string | null;
           label: string;
@@ -1756,14 +3791,14 @@ export interface TaskSchedulePublish {
     doc?:
       | ({
           relationTo: 'pages';
-          value: string | Page;
+          value: number | Page;
         } | null)
       | ({
           relationTo: 'posts';
-          value: string | Post;
+          value: number | Post;
         } | null);
     global?: string | null;
-    user?: (string | null) | User;
+    user?: (number | null) | User;
   };
   output?: unknown;
 }
